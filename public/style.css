@@ -171,13 +171,6 @@ button:disabled {
   justify-content: center;
 }
 
-.bottom-wall {
-  bottom: 13%;
-  left: 16%;
-  right: 16%;
-  justify-content: center;
-}
-
 .seat {
   position: absolute;
   text-align: center;

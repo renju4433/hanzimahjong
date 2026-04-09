@@ -19,7 +19,6 @@ const oppCountEl = document.getElementById('oppCount');
 const oppTilesEl = document.getElementById('oppTiles');
 
 const topWallEl = document.getElementById('topWall');
-const bottomWallEl = document.getElementById('bottomWall');
 
 const discardAreaEl = document.getElementById('discardArea');
 const playerAreaEl = document.getElementById('playerArea');
@@ -49,11 +48,9 @@ function makeTile(char, kind = 'me') {
 
 function renderStaticWalls() {
   topWallEl.innerHTML = '';
-  bottomWallEl.innerHTML = '';
 
   for (let i = 0; i < 8; i += 1) {
     topWallEl.appendChild(makeTile('', 'wall'));
-    bottomWallEl.appendChild(makeTile('', 'wall'));
   }
 }
 
