@@ -146,6 +146,7 @@ button:disabled {
   border-radius: 8px;
   border: 1px solid rgba(187, 242, 244, 0.28);
   background: rgba(7, 70, 75, 0.35);
+  z-index: 2;
 }
 
 .center-mark {
@@ -156,16 +157,18 @@ button:disabled {
   color: rgba(223, 249, 250, 0.4);
   letter-spacing: 6px;
   font-size: 26px;
+  z-index: 1;
 }
 
 .wall {
   position: absolute;
   display: flex;
   gap: 4px;
+  z-index: 2;
 }
 
 .top-wall {
-  top: 10%;
+  top: 7%;
   left: 22%;
   right: 22%;
   justify-content: center;
@@ -179,9 +182,10 @@ button:disabled {
 }
 
 .top-seat {
-  top: 16%;
+  top: 18%;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 4;
 }
 
 .seat .name {
@@ -211,6 +215,7 @@ button:disabled {
   transform: translateX(-50%);
   display: flex;
   gap: 6px;
+  z-index: 5;
 }
 
 .tile {
