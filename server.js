@@ -11,7 +11,33 @@ const HAND_BASE = WIN_PAIR_COUNT * 2 - 1;
 const DRAW_COUNT = 1;
 
 const app = express();
-app.use(express.static(path.join(__dirname, 'public')));
+const publicDir = path.join(__dirname, 'public');
+
+app.use(
+  express.static(publicDir, {
+    setHeaders: (res, filePath) => {
+      if (filePath.endsWith('.js')) {
+        res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+      } else if (filePath.endsWith('.css')) {
+        res.setHeader('Content-Type', 'text/css; charset=utf-8');
+      }
+    },
+  }),
+);
+
+app.get('/', (_req, res) => {
+  res.sendFile(path.join(publicDir, 'index.html'));
+});
+
+app.get('/app.js', (_req, res) => {
+  res.type('application/javascript; charset=utf-8');
+  res.sendFile(path.join(publicDir, 'app.js'));
+});
+
+app.get('/style.css', (_req, res) => {
+  res.type('text/css; charset=utf-8');
+  res.sendFile(path.join(publicDir, 'style.css'));
+});
 
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
