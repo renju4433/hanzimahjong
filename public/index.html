@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>汉字麻将房间对战</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="lobby panel" id="lobby">
+        <h1>双人汉字麻将</h1>
+        <p>和牌规则：4对（二字词语x4，共8张）</p>
+        <label>
+          玩家名
+          <input id="playerName" maxlength="12" placeholder="请输入昵称" />
+        </label>
+        <div class="actions">
+          <button id="createRoom">开房间</button>
+          <input id="roomCode" placeholder="输入房间码" maxlength="8" />
+          <button id="joinRoom">加入房间</button>
+        </div>
+      </section>
+
+      <section class="game hidden" id="tableWrap">
+        <div class="topbar panel">
+          <div>房间: <b id="roomText">-</b></div>
+          <div>牌墙: <b id="deckText">-</b></div>
+          <div>回合: <b id="turnText">-</b></div>
+          <div>最新弃牌: <b id="discardText">-</b></div>
+          <div class="result" id="resultText"></div>
+        </div>
+
+        <div class="table" id="table3d">
+          <div class="felt"></div>
+          <div class="center-box" id="discardArea"></div>
+          <div class="center-mark">汉字麻将</div>
+
+          <div class="seat top-seat">
+            <div class="name" id="oppName">对家</div>
+            <div class="count" id="oppCount">手牌 0</div>
+            <div class="row" id="oppTiles"></div>
+          </div>
+
+          <div class="wall top-wall" id="topWall"></div>
+          <div class="wall bottom-wall" id="bottomWall"></div>
+
+          <div class="my-hand" id="playerArea"></div>
+        </div>
+
+        <div class="controls panel">
+          <button id="winBtn">和牌</button>
+          <button id="restartBtn">重开</button>
+          <div id="comboText" class="combo"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

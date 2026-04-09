@@ -1,0 +1,13 @@
+{
+  "name": "hanzi-mahjong",
+  "version": "1.0.0",
+  "description": "双人汉字麻将（房间制）",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "ws": "^8.18.0"
+  }
+}
