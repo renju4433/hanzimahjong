@@ -190,9 +190,7 @@ function randomCode() {
 function buildDeck() {
   const deck = [];
   for (const c of allChars) {
-    for (let i = 0; i < 4; i += 1) {
-      deck.push(c);
-    }
+    deck.push(c);
   }
   return shuffle(deck);
 }
@@ -232,7 +230,7 @@ function deal(room) {
     }
   });
 
-  room.started = room.players.length >= 1;
+  room.started = room.players.length === 2;
 }
 
 function getPlayerIndex(room, ws) {
@@ -320,20 +318,10 @@ function playerDraw(room, idx) {
 }
 
 function startIfReady(room) {
-  if (room.players.length >= 1 && !room.started) {
+  if (room.players.length === 2 && !room.started) {
     deal(room);
     autoDrawForCurrentTurn(room);
     broadcastRoom(room);
-    return;
-  }
-
-  if (room.players.length === 2) {
-    const bothHaveHand = room.players.every((p) => Array.isArray(p.hand) && p.hand.length > 0);
-    if (!bothHaveHand) {
-      deal(room);
-      autoDrawForCurrentTurn(room);
-      broadcastRoom(room);
-    }
   }
 }
 
@@ -386,7 +374,7 @@ function handleDiscard(ws, payload) {
 
   my.hand.splice(hit, 1);
   room.discard.push(card);
-  room.turn = room.players.length >= 2 ? 1 - room.turn : 0;
+  room.turn = 1 - room.turn;
   autoDrawForCurrentTurn(room);
 
   broadcastRoom(room);
@@ -415,8 +403,8 @@ function handleWin(ws) {
 function handleRestart(ws) {
   const room = rooms.get(ws._roomCode);
   if (!room) return;
-  if (room.players.length < 1) {
-    safeSend(ws, { type: 'error', message: '房间为空，无法重开' });
+  if (room.players.length < 2) {
+    safeSend(ws, { type: 'error', message: '人数不足，无法重开' });
     return;
   }
 

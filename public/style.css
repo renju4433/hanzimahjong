@@ -7,7 +7,7 @@
   --gold: #f7cf76;
   --tile-face: #f5f3e8;
   --tile-edge: #c9c1ac;
-  --tile-back: #4da42e;
+  --tile-back: #c7c0ad;
 }
 
 * {
@@ -251,8 +251,10 @@ button:disabled {
 
 .tile.hidden,
 .tile.wall {
-  background: linear-gradient(180deg, #7cd35a, var(--tile-back));
-  border-color: #2f6320;
+  background:
+    linear-gradient(180deg, #f0ece1, #d5cdb8 60%, var(--tile-back)),
+    repeating-linear-gradient(45deg, rgba(80, 70, 52, 0.08) 0 4px, rgba(80, 70, 52, 0.02) 4px 8px);
+  border-color: #8d8067;
 }
 
 .tile.discard {
