@@ -342,7 +342,7 @@ function handleJoin(ws, payload) {
   const room = rooms.get(roomCode);
 
   if (!room) return safeSend(ws, { type: 'error', message: '房间不存在' });
-  if (room.players.length >= 2) return safeSend(ws, { type: 'error', message: '房间已满' });
+  if (room.players.length > 2) return safeSend(ws, { type: 'error', message: '房间已满' });
 
   room.players.push({ ws, name, hand: [] });
   ws._roomCode = room.code;
