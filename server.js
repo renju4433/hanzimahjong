@@ -243,6 +243,18 @@ function safeSend(ws, payload) {
   }
 }
 
+function normalizeRoomPlayers(room) {
+  const next = [];
+  const seen = new Set();
+  for (const p of room.players) {
+    if (!p.ws || p.ws.readyState !== p.ws.OPEN) continue;
+    if (seen.has(p.ws)) continue;
+    seen.add(p.ws);
+    next.push(p);
+  }
+  room.players = next;
+}
+
 function roomPublicState(room, perspective = -1) {
   const me = perspective >= 0 ? room.players[perspective] : null;
   const opp = perspective >= 0 ? room.players[1 - perspective] : null;
@@ -327,6 +339,7 @@ function startIfReady(room) {
 
 function handleCreate(ws, payload) {
   const name = String(payload.name || '').trim() || '玩家A';
+  removeClient(ws);
   const room = createRoom();
 
   room.players.push({ ws, name, hand: [] });
@@ -342,7 +355,14 @@ function handleJoin(ws, payload) {
   const room = rooms.get(roomCode);
 
   if (!room) return safeSend(ws, { type: 'error', message: '房间不存在' });
-  if (room.players.length > 2) return safeSend(ws, { type: 'error', message: '房间已满' });
+  normalizeRoomPlayers(room);
+  if (room.players.some((p) => p.ws === ws)) {
+    ws._roomCode = room.code;
+    return safeSend(ws, { type: 'joined', roomCode: room.code });
+  }
+  if (room.players.length >= 2) return safeSend(ws, { type: 'error', message: '房间已满' });
+
+  removeClient(ws);
 
   room.players.push({ ws, name, hand: [] });
   ws._roomCode = room.code;
@@ -416,6 +436,7 @@ function handleRestart(ws) {
 function removeClient(ws) {
   const code = ws._roomCode;
   if (!code) return;
+  ws._roomCode = null;
 
   const room = rooms.get(code);
   if (!room) return;
