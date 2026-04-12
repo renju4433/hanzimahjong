@@ -30,6 +30,10 @@ const wsUrl = (location.protocol === 'https:' ? 'wss://' : 'ws://') + location.h
 const ws = new WebSocket(wsUrl);
 
 function send(action, payload = {}) {
+  if (ws.readyState !== WebSocket.OPEN) {
+    alert('连接尚未建立，请稍后再试');
+    return;
+  }
   ws.send(JSON.stringify({ action, ...payload }));
 }
 
@@ -52,6 +56,27 @@ function renderStaticWalls() {
   for (let i = 0; i < 8; i += 1) {
     topWallEl.appendChild(makeTile('', 'wall'));
   }
+}
+
+function enterTablePending(roomCode) {
+  lobbyEl.classList.add('hidden');
+  tableWrapEl.classList.remove('hidden');
+
+  roomTextEl.textContent = roomCode || '-';
+  deckTextEl.textContent = '-';
+  turnTextEl.textContent = '等待另一位玩家加入房间';
+  discardTextEl.textContent = '-';
+  resultTextEl.textContent = '';
+  comboTextEl.textContent = '等待开局';
+
+  oppNameEl.textContent = '对家';
+  oppCountEl.textContent = '手牌 0';
+  oppTilesEl.innerHTML = '';
+  playerAreaEl.innerHTML = '';
+  discardAreaEl.innerHTML = '';
+
+  winBtn.disabled = true;
+  restartBtn.disabled = true;
 }
 
 function updateUI(state) {
@@ -141,6 +166,7 @@ ws.addEventListener('message', (ev) => {
 
   if (msg.type === 'created' || msg.type === 'joined') {
     roomCodeEl.value = msg.roomCode;
+    enterTablePending(msg.roomCode);
     return;
   }
 

@@ -347,6 +347,7 @@ function handleCreate(ws, payload) {
 
   safeSend(ws, { type: 'created', roomCode: room.code });
   startIfReady(room);
+  if (!room.started) broadcastRoom(room);
 }
 
 function handleJoin(ws, payload) {
@@ -358,7 +359,9 @@ function handleJoin(ws, payload) {
   normalizeRoomPlayers(room);
   if (room.players.some((p) => p.ws === ws)) {
     ws._roomCode = room.code;
-    return safeSend(ws, { type: 'joined', roomCode: room.code });
+    safeSend(ws, { type: 'joined', roomCode: room.code });
+    if (!room.started) broadcastRoom(room);
+    return;
   }
   if (room.players.length >= 2) return safeSend(ws, { type: 'error', message: '房间已满' });
 
@@ -369,6 +372,7 @@ function handleJoin(ws, payload) {
 
   safeSend(ws, { type: 'joined', roomCode: room.code });
   startIfReady(room);
+  if (!room.started) broadcastRoom(room);
 }
 
 function handleDraw(ws) {
